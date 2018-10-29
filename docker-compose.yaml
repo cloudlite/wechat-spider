@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+
+  wechatspider:
+    build:
+      dockerfile: docker/wechatspider.dockerfile
+      context: .
+      args:
+        - BASE_OS=centos73
+        - PYTHON_VERSION=python2.7
+    depends_on:
+      - database
+    environment:
+      GUNICORN_CMD_ARGS: "--reload --workers=1"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8111:5000
+    volumes:
+      - ./:/app
+      - ./docker/files/etc:/wayfair/etc
+      - ./docker/files/priv:/tmp/freyja
+      - home:/root
+
+  database:
+    environment:
+      MYSQL_DATABASE: wechatspider
+      MYSQL_PASSWORD: Bik@n
+      MYSQL_ROOT_PASSWORD: bikanrootpassword
+      MYSQL_USER: bikanadmin
+    image: mysql:5.6
+    ports:
+      - 8112:3306
+    restart: always
+    volumes:
+      - ./freyja/deploy/fixtures:/docker-entrypoint-initdb.d
+      # - database:/var/lib/mysql
+
+volumes:
+  # database:
+  home:
+  venv:
+  wayfair-data:
+    driver: local
