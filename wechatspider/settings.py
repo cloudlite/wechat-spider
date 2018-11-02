@@ -162,7 +162,7 @@ REDIS_OPTIONS = {
 }
 
 # crawler config
-CRAWLER_DEBUG = False
+CRAWLER_DEBUG = True
 CRAWLER_CONFIG = {
     'scheduler': 'unicrawler:scheduler',
     'downloader': 'unicrawler:downloader',
